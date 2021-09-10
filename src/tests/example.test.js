@@ -1,12 +1,15 @@
 import { expect } from "chai";
 import { step } from "mocha-steps";
 import Page from '../builder'
+import LoginPage from "../pages/LoginPage";
 
 describe('Mocha steps tests', () => {
     let page
+    let loginPage
 
     before(async () => {
         page = await Page.build('Desktop');
+        loginPage = await new LoginPage(page);
     })
 
     after(async () => {
@@ -25,9 +28,7 @@ describe('Mocha steps tests', () => {
     });
 
     step('should not login to application', async () => {
-        await page.waitAndType('#user_login', 'username');
-        await page.waitAndType('#user_password', 'password');
-        await page.waitAndClick('.btn-primary');
+        await loginPage.login('username', 'password');
         expect(await page.isElementVisible('.nav-tabs')).to.be.false;
     });
 
